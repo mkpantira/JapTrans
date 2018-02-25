@@ -3,12 +3,102 @@
 
     <item
         is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.21.0/8ce17bdd15fff0fd8cf359757f29e778fc7191ad/google-http-client-jackson2-1.21.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="8ce17bdd15fff0fd8cf359757f29e778fc7191ad">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/google-http-client-jackson2-1.21.0_9bfc199d19c4c4e0c16b352106e67aa34a45fb77/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.2"
-        sha1="e77a2ebf847bcfdf2a809de1794e7361fd6afe4f">
+        sha1="244407989b04314393cee7b756c125c10869363e">
         <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_4ce67f7e9eb996d007c672b14d6862e3b0d9aa8d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.oauth-client/google-oauth-client/1.21.0/61ec42bbfc51aafde5eb8b4923c602c5b5965bc2/google-oauth-client-1.21.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="61ec42bbfc51aafde5eb8b4923c602c5b5965bc2">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/google-oauth-client-1.21.0_108abdeb620294a79b6990d8f8a5408d380d13e9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/1.3.9/40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf/jsr305-1.3.9.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/jsr305-1.3.9_43f502b76a25e537f72cde8b1aeac526495f7ac4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.21.0/42631630fe1276d4d6d6397bb07d53a4e4fec278/google-http-client-1.21.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="42631630fe1276d4d6d6397bb07d53a4e4fec278">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/google-http-client-1.21.0_6837e554796afc75780ec3d6e0a260ecb2fbd761/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.1.3/f6c3aed1cdfa21b5c1737c915186ea93a95a58bd/jackson-core-2.1.3.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="f6c3aed1cdfa21b5c1737c915186ea93a95a58bd">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/jackson-core-2.1.3_bce4fab6816de8623c6b446f258889c7c9bd5e5c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.1/2e66da15851f9f5b5079228f856c2f090ba98c38/gson-2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="2e66da15851f9f5b5079228f856c2f090ba98c38">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/gson-2.1_02cf61c217a7af0a6af51d43b7c57774029a4c6c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/1.21.0/16a6b3c680f3bf7b81bb42790ff5c1b72c5bbedc/google-api-client-1.21.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="16a6b3c680f3bf7b81bb42790ff5c1b72c5bbedc">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/google-api-client-1.21.0_634d935cca00d97c3970105ce1e78a382e9cfe38/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-android/1.20.0/5673179575c32b69a474334255c3044adf18d40/google-api-client-android-1.20.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="05673179575c32b69a474334255c3044adf18d40">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/google-api-client-android-1.20.0_dab7afe62445d2a74c78da17b73911853ea50b0b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-vision/v1-rev2-1.21.0/4db84d916e8ec80d9aa11c5f89a6cb6621ac1c85/google-api-services-vision-v1-rev2-1.21.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="4db84d916e8ec80d9aa11c5f89a6cb6621ac1c85">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/google-api-services-vision-v1-rev2-1.21.0_995af3d47d955dc17ad86280703ee14c4bc4db1c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-gson/1.20.0/9204765f39000f6109c927ac66c7963bf9c7df19/google-http-client-gson-1.20.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="9204765f39000f6109c927ac66c7963bf9c7df19">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/google-http-client-gson-1.20.0_77d4b09a72bc3c709753e7668d3bacd57efe5e4c/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -18,6 +108,24 @@
         revision="26.0.2"
         sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
         <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_b706b9ff6aca0e1fcc1c1669d253e53501face06/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-android/1.20.0/313dc99a7963523871495897ca11aa8472b3c6fd/google-http-client-android-1.20.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="313dc99a7963523871495897ca11aa8472b3c6fd">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/google-http-client-android-1.20.0_4267436302efadda8a9a456545d7948f714f7e68/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/PantiraSuttipongkanasai/.gradle/caches/modules-2/files-2.1/com.google.guava/guava-jdk5/17.0/463f8378feba44df7ba7cd9272d01837dad62b36/guava-jdk5-17.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="463f8378feba44df7ba7cd9272d01837dad62b36">
+        <dex dex="/Users/PantiraSuttipongkanasai/Desktop/Senior Project/JapScreenTranslate/app/build/intermediates/transforms/dex/debug/folders/1000/10/guava-jdk5-17.0_01e1a5da84a92d932d7de59a4c4dbe60b1650bef/classes.dex" />
     </item>
 
 </items>

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -19,6 +20,7 @@ import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -26,6 +28,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,9 +43,38 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.vision.v1.Vision;
+import com.google.api.services.vision.v1.VisionRequestInitializer;
+import com.google.api.services.vision.v1.model.AnnotateImageRequest;
+import com.google.api.services.vision.v1.model.AnnotateImageResponse;
+import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
+import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
+import com.google.api.services.vision.v1.model.ColorInfo;
+import com.google.api.services.vision.v1.model.DominantColorsAnnotation;
+import com.google.api.services.vision.v1.model.EntityAnnotation;
+import com.google.api.services.vision.v1.model.Feature;
+//import com.google.api.services.vision.v1.model.Image;
+import com.google.api.services.vision.v1.model.ImageProperties;
+import com.google.api.services.vision.v1.model.SafeSearchAnnotation;
+import com.google.api.services.vision.v1.model.Vertex;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.example.pantirasuttipongkanasai.japscreentranslate.R.id.image;
 
@@ -65,7 +98,12 @@ public class FloatWidgetService extends Service {
     public MediaProjection mMediaProjection;
     private ImageReader mImageReader;
     public VirtualDisplay mVirtualDisplay;
-
+    private final static String CLOUD_VISION_API_KEY = "AIzaSyCVAhzmQLI-f-Y18X81WzW8LGWQaXsNe68";
+    private Feature feature;
+    private String[] visionAPI = new String[]{"TEXT_DETECTION"};
+    private String api = visionAPI[0];
+    private List<String> result_words_list;
+    private List<List<Vertex>> result_verticesList_list;
 
     public FloatWidgetService() {
     }
@@ -394,7 +432,8 @@ public class FloatWidgetService extends Service {
 
 
     private double bounceValue(long step, long scale){
-        double value = scale * java.lang.Math.exp(-0.055 * step) * java.lang.Math.cos(0.08 * step);
+//        double value = scale * java.lang.Math.exp(-0.055 * step) * java.lang.Math.cos(0.08 * step);
+        double value = scale * java.lang.Math.exp(-0.055 * step);
         return value;
     }
 
@@ -418,43 +457,14 @@ public class FloatWidgetService extends Service {
 //        mImageReader = ImageReader.newInstance(displayWidth, mDisplayHeight, ImageFormat.JPEG, 2);
         mVirtualDisplay = mMediaProjection.createVirtualDisplay("ScreenCapture", displayWidth, mDisplayHeight, mDensityDpi,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
-        Image image = null;
-//        FileOutputStream fos = null;
-//        Bitmap bitmap = null;
-//        try {
-//            Log.d("test","try");
-//            image = mImageReader.acquireLatestImage();
-//
-//            if (image != null) {
-//                Log.d("test","try not null");
-//                final Image.Plane[] planes = image.getPlanes();
-//                final Buffer imageBuffer = planes[0].getBuffer().rewind();
-//
-//                // create bitmap
-//                bitmap = Bitmap.createBitmap(displayWidth, mDisplayHeight, Bitmap.Config.ARGB_8888);
-//                bitmap.copyPixelsFromBuffer(imageBuffer);
-//                // write bitmap to a file
-//                fos = new FileOutputStream(getFilesDir() + "/myscreen.png");
-//
-//                /**
-//                 uncomment this if you want either PNG or JPEG output
-//                 */
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-//                //bitmap.compress(CompressFormat.PNG, 100, fos);
-//
-//            }
-//
-//        } catch (Exception e) {
-//            Log.d("test","catch");
-//            e.printStackTrace();
-//        }
+        android.media.Image image = null;
 
 
         while(image == null){
             image = mImageReader.acquireLatestImage();
         }
 
-        final Image.Plane[] planes = image.getPlanes();
+        final android.media.Image.Plane[] planes = image.getPlanes();
         final ByteBuffer buffer = planes[0].getBuffer();
         int offset = 0;
         int pixelStride = planes[0].getPixelStride();
@@ -466,22 +476,19 @@ public class FloatWidgetService extends Service {
         Bitmap bmp = Bitmap.createBitmap(displayWidth+rowPadding/pixelStride, mDisplayHeight, Bitmap.Config.RGB_565);
         bmp.copyPixelsFromBuffer(buffer);
 
-//        ImagePath = MediaStore.Images.Media.insertImage(
-//                getContentResolver(),
-//                bmp,
-//                "demo_image",
-//                "demo_image"
-//        );
-//
-//        URI = Uri.parse(ImagePath);
-
-
-
         image.close();
         mVirtualDisplay.release();
         mVirtualDisplay = null;
         mMediaProjection.stop();
-        floatwidgetImg.setImageBitmap(bmp);
+//        floatwidgetImg.setImageBitmap(bmp);
+
+        feature = new Feature();
+        feature.setType(visionAPI[0]);
+        feature.setMaxResults(10);
+        callCloudVision(bmp, feature);
+
+        image = null;
+
 //        if(!isOverlay){
 //            isOverlay = true;
 //            Intent it = new Intent(FloatWidgetService.this, OverlayService.class);
@@ -520,6 +527,184 @@ public class FloatWidgetService extends Service {
             windowManager.removeView(removeView);
         }
 
+    }
+
+    private void callCloudVision(final Bitmap bitmap, final Feature feature){
+        final List<Feature> featureList = new ArrayList<>();
+        featureList.add(feature);
+
+        final List<AnnotateImageRequest> annotateImageRequests = new ArrayList<>();
+
+        AnnotateImageRequest annotateImageReq = new AnnotateImageRequest();
+        annotateImageReq.setFeatures(featureList);
+        annotateImageReq.setImage(getImageEncodeImage(bitmap));
+        annotateImageRequests.add(annotateImageReq);
+
+        new AsyncTask<Object, Void, String>() {
+            @Override
+            protected String doInBackground(Object... params) {
+                try {
+
+                    HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
+                    JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+
+                    VisionRequestInitializer requestInitializer = new VisionRequestInitializer(CLOUD_VISION_API_KEY);
+
+                    Vision.Builder builder = new Vision.Builder(httpTransport, jsonFactory, null);
+                    builder.setVisionRequestInitializer(requestInitializer);
+
+                    Vision vision = builder.build();
+
+                    BatchAnnotateImagesRequest batchAnnotateImagesRequest = new BatchAnnotateImagesRequest();
+                    batchAnnotateImagesRequest.setRequests(annotateImageRequests);
+
+                    Vision.Images.Annotate annotateRequest = vision.images().annotate(batchAnnotateImagesRequest);
+                    annotateRequest.setDisableGZipContent(true);
+                    BatchAnnotateImagesResponse response = annotateRequest.execute();
+                    return convertResponseToString(response);
+
+                } catch (GoogleJsonResponseException e) {
+                    Log.d("TAG", "failed to make API request because " + e.getContent());
+                } catch (IOException e) {
+                    Log.d("TAG", "failed to make API request because of other IOException " + e.getMessage());
+                }
+                return "Cloud Vision API request failed. Check logs for details.";
+            }
+
+            protected void onPostExecute(String result) {
+
+                String allSentence = result_words_list.get(0);
+                int words_size = result_words_list.size()-1 ;
+
+                List<String> sentence = new ArrayList<>();
+                String temp_sentence = "";
+                for (int count = 1; count <= words_size; count++){
+
+                    if(count == 1) {
+                        temp_sentence = result_words_list.get(count).toString();
+
+                    }else {
+                        Log.d("sentence",result_words_list.get(count).toString());
+                        int x1A = result_verticesList_list.get(count-1).get(0).getX();
+                        int x2A = result_verticesList_list.get(count-1).get(1).getX();
+                        int x3A = result_verticesList_list.get(count-1).get(2).getX();
+                        int x4A = result_verticesList_list.get(count-1).get(3).getX();
+
+                        int y1A = result_verticesList_list.get(count-1).get(0).getY();
+                        int y2A = result_verticesList_list.get(count-1).get(1).getY();
+                        int y3A = result_verticesList_list.get(count-1).get(2).getY();
+                        int y4A = result_verticesList_list.get(count-1).get(3).getY();
+
+                        int x1B = result_verticesList_list.get(count).get(0).getX();
+                        int x2B = result_verticesList_list.get(count).get(1).getX();
+                        int x3B = result_verticesList_list.get(count).get(2).getX();
+                        int x4B = result_verticesList_list.get(count).get(3).getX();
+
+                        int y1B = result_verticesList_list.get(count).get(0).getY();
+                        int y2B = result_verticesList_list.get(count).get(1).getY();
+                        int y3B = result_verticesList_list.get(count).get(2).getY();
+                        int y4B = result_verticesList_list.get(count).get(3).getY();
+
+                        if(y1B > y4A){
+                            //maybe new line
+                            if((x4A > x4B) && ((y4A + (y4B - y1B) ) < y1B)){
+
+                                //new line
+                                sentence.add(temp_sentence);
+                                temp_sentence = result_words_list.get(count).toString();
+
+                            }else if ((y4A + (y4B - y1B) ) > y1B){
+                                //same line
+                                temp_sentence = temp_sentence + result_words_list.get(count).toString();
+
+                            }else{
+                                //same line
+                                temp_sentence = temp_sentence + result_words_list.get(count).toString();
+                            }
+
+                        }else{
+                            //same line
+                            temp_sentence = temp_sentence + result_words_list.get(count).toString();
+
+                        }
+
+                    }
+
+
+                }
+
+
+                sentence.add(temp_sentence);
+
+
+                Log.d("sentence",sentence.toString());
+
+//                for(int i=0; i < sentence.size() ; i++) {
+//                    Log.d("sentence", sentence.get(i));
+//                }
+            }
+
+
+
+        }.execute();
+
+    }
+    @NonNull
+    private com.google.api.services.vision.v1.model.Image getImageEncodeImage(Bitmap bitmap) {
+        com.google.api.services.vision.v1.model.Image base64EncodedImage = new com.google.api.services.vision.v1.model.Image();
+
+        // Convert the bitmap to a JPEG
+        // Just in case it's a format that Android understands but Cloud Vision
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+        byte[] imageBytes = byteArrayOutputStream.toByteArray();
+
+        // Base64 encode the JPEG
+        base64EncodedImage.encodeContent(imageBytes);
+        return base64EncodedImage;
+    }
+
+    private String convertResponseToString(BatchAnnotateImagesResponse response) {
+
+        AnnotateImageResponse imageResponses = response.getResponses().get(0);
+
+        List<EntityAnnotation> entityAnnotations;
+
+        String message = "";
+        switch (api) {
+            case "TEXT_DETECTION":
+                entityAnnotations = imageResponses.getTextAnnotations();
+                message = formatAnnotation(entityAnnotations);
+                Log.d("result",entityAnnotations.toString());
+                break;
+        }
+        return message;
+    }
+
+    private String formatAnnotation(List<EntityAnnotation> entityAnnotation) {
+        String message = "{";
+//        int numOfResult = 0;
+
+        if (entityAnnotation != null) {
+            result_words_list =  new ArrayList<>();
+            result_verticesList_list = new ArrayList<>();
+            for (EntityAnnotation entity : entityAnnotation) {
+                result_words_list.add(entity.getDescription());
+                result_verticesList_list.add(entity.getBoundingPoly().getVertices());
+
+                message = message + "    " + entity.getDescription() + " " + entity.getBoundingPoly().getVertices();
+                message += "\n";
+
+            }
+            Log.d("messages",message);
+            Log.d("words",result_words_list.toString());
+            Log.d("words",Integer.toString(result_words_list.size()));
+            Log.d("vertices",Integer.toString(result_verticesList_list.size()));
+            Log.d("vertices",result_verticesList_list.toString());
+        } else {
+            message = "Nothing Found";
+        }
+        return message;
     }
 
 }
